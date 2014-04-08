@@ -8,6 +8,8 @@
               (recur (inc counter) (conj result counter))
               (recur (inc counter) result))
             result)))
+            
+            ;(f m) is a vector of the divisors of m, so y is all the divisors > 1 of n.
                        
                        y (rest (f n))]
                    (loop [sum 0, counter 1]
