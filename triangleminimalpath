@@ -1,0 +1,18 @@
+(fn mintrianglesum [q]
+        (let [v (vec q)
+              f (fn [x p]
+                  (let [w (vec p)]
+                   (+ (first (first w)) (apply + (map-indexed #(get (get w (+ 1 %1)) %2) x)))))
+              g (fn [z]
+                  (vec (map #(Integer/parseInt (str %)) z)))
+              h (fn [n]
+                  (map #(str (apply str (repeat (- (- n 1) (count %)) 0)) %) (map #(Integer/toString % 2) (range (Math/pow 2 (- n 1))))))
+              ]
+        (apply min (map #(f % v) (map (fn [y]
+                                   (loop [counter 1, result y]
+          (if (< counter (count y))
+            (if (= (get result counter) 0)
+              (recur (inc counter) (assoc result counter (get result (- counter 1))))
+              (recur (inc counter) (assoc result counter (inc (get result (- counter 1))))))
+            result)))
+                             (vec (map g (map vec (h (count v))))))))))

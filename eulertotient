@@ -1,0 +1,18 @@
+(fn totient [n]
+        (if (= n 1)
+          1
+                 (let [f (fn [m]
+                           (loop [counter 2, result [1]]
+          (if (<= counter m)
+            (if (== (mod m counter) 0)
+              (recur (inc counter) (conj result counter))
+              (recur (inc counter) result))
+            result)))
+                       
+                       y (rest (f n))]
+                   (loop [sum 0, counter 1]
+                     (if (< counter n)
+                       (if (apply distinct? (concat y (f counter)))
+                         (recur (inc sum) (inc counter))
+                         (recur sum (inc counter)))
+                       sum)))))

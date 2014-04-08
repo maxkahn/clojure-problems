@@ -1,0 +1,4 @@
+(fn newtrampoline [f & x]
+        (if (not (fn? (apply f x)))
+          (apply f x)
+          (newtrampoline (apply f x))))
