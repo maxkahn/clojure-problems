@@ -1,0 +1,4 @@
+(fn pronounceseq [x]
+           (drop 1 (iterate (fn f [y] 
+                              (mapcat #(vector (count %) (first %)) (partition-by identity y)))
+                            x)))
