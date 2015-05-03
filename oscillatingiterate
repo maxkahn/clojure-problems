@@ -1,0 +1,2 @@
+(fn oscilrate [x & y]
+     (lazy-seq (cons x (apply oscilrate ((first y) x) (conj (vec (rest y)) (first y))))))
