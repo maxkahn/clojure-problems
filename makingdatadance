@@ -1,0 +1,6 @@
+(fn datadance [& x]
+              (reify clojure.lang.Seqable
+                (toString [_] (apply str (interpose ", " (sort x))))
+                (seq [_] (if (empty? x)
+                           nil
+                           (distinct x)))))
