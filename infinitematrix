@@ -1,0 +1,15 @@
+(fn infmatrix
+                ([f]
+                  (let [newrange (fn f [n]
+                               (lazy-seq (cons n (f (inc n)))))]
+                    (map (fn g [s]
+                           (map (partial f (first s)) (rest s)))
+                         (map #(cons % (newrange 0)) (newrange 0)))))
+                     ([f m n]
+                       (let [newdrop (fn g [x w]
+                                       (if (== x 0)
+                                         w
+                                         (g (dec x) (rest w))))]
+                       (map #(newdrop n %) (newdrop m (infmatrix f)))))
+                     ([f m n s t]
+                       (map #(take t %) (take s (infmatrix f m n)))))
