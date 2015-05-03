@@ -1,0 +1,10 @@
+(fn balancedprime? [n]
+                                (if (<= n 3)
+                                  false
+                                  (loop [init (vec (rest (rest (take n (range))))) fut (drop (+ n 1) (range))]
+                                    (if (empty? (rest init))
+                                      (= n (/ (+ (peek init) (first fut)) 2))
+                                      (if (= 0 (mod n (first init)))
+                                        false
+                                        (recur (vec (remove #(= 0 (mod % (first init))) init))
+                                               (remove #(= 0 (mod % (first init))) fut)))))))
