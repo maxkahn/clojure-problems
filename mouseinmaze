@@ -1,0 +1,33 @@
+(fn mazesolver [b]
+              (let [v (vec (flatten (map vec b)))
+                    rowlength (count (first b))
+                    columnheight (count b)
+                    cellcount (count v)
+                    mouse (first (for [i (range cellcount)
+                                       :when (= (get v i) \M)]
+                                   i))
+                    cheese (first (for [i (range cellcount)
+                                        :when (= (get v i) \C)]
+                                    i))]
+                (if (or (and (not= 0 (mod mouse rowlength)) (== mouse (inc cheese)))
+                        (and (not= 0 (mod cheese rowlength)) (== mouse (dec cheese)))
+                        (== mouse (+ cheese rowlength))
+                        (== mouse (- cheese rowlength)))
+                  true
+                  (if (and (>= mouse rowlength) (= (get v (- mouse rowlength)) \space))
+                    (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \m) (- mouse rowlength) \M))))
+                    (if (and (< (+ mouse rowlength) cellcount) (= (get v (+ mouse rowlength)) \space))
+                      (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \m) (+ mouse rowlength) \M))))
+                      (if (and (not= 0 (mod mouse rowlength)) (= (get v (dec mouse)) \space))
+                        (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \m) (dec mouse) \M))))
+                        (if (and (not= 0 (mod (inc mouse) rowlength)) (= (get v (inc mouse)) \space))
+                          (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \m) (inc mouse) \M))))
+                          (if (and (>= mouse rowlength) (= (get v (- mouse rowlength)) \m))
+                            (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \#) (- mouse rowlength) \M))))
+                            (if (and (< (+ mouse rowlength) cellcount) (= (get v (+ mouse rowlength)) \m))
+                              (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \#) (+ mouse rowlength) \M))))
+                              (if (and (not= 0 (mod mouse rowlength)) (= (get v (dec mouse)) \m))
+                                (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \#) (dec mouse) \M))))
+                                (if (and (not= 0 (mod (inc mouse) rowlength)) (= (get v (inc mouse)) \m))
+                                  (mazesolver (map #(apply str %) (partition rowlength (assoc (assoc v mouse \#) (inc mouse) \M))))
+                                  false)))))))))))
