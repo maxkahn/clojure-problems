@@ -1,0 +1,8 @@
+(fn transitiveclosure [m]
+     (loop [storage #{} result m]
+       (if (= storage result)
+         result
+         (recur result (set (into result (for [x result
+                                               y result
+                                               :when (= (peek x) (first y))]
+                                           (vector (first x) (peek y)))))))))
