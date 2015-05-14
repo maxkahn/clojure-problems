@@ -1,0 +1,26 @@
+(fn chainclosure [s]
+  (let [wordpair (fn [s t]
+          (or (and (== (count s) (count t))
+                   (== 1 (apply + (for [x (range (count s))
+                                        :when (not= (get (vec s) x) (get (vec t) x))]
+                                    1))))
+              (and (== (count s) (inc (count t)))
+                   (reduce #(or %1 %2) (for [x (range (count s))]
+                                        (= (str (subs s 0 x) (subs s (inc x) (count s))) t))))
+              (and (== (count t) (inc (count s)))
+                   (reduce #(or %1 %2) (for [x (range (count t))]
+                                         (= (str (subs t 0 x) (subs t (inc x) (count t))) s))))))]
+(if (<= (count s) 1)
+          true
+          (loop [storage #{} result (for [x s
+                                          y s
+                                          :when (wordpair x y)]
+                                      (vector x y))]
+            (if (nil? (some #{(count s)} (map count result)))
+              (if (= storage result)
+                false
+                (recur result (set (into result (for [x result
+                                                      y result
+                                                      :when (and (= (peek x) (first y)) (nil? (some #{(second y)} x)))]
+                                                  (into x (rest y)))))))
+              true)))))
