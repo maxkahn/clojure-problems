@@ -1,0 +1,6 @@
+(fn powerset [x]
+     (if (empty? x)
+       #{#{}}
+       (into (powerset (set (rest x))) (set (for [y (vector (first x))
+                                                  z (powerset (set (rest x)))]
+                                              (conj z y))))))
